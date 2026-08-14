@@ -1,0 +1,130 @@
+================================================================================
+EXPERIMENT 02: YOLO + PRISMGHOST FOR 20-CLASS PLANT DISEASE OBJECT DETECTION
+COMPREHENSIVE TECHNICAL SUMMARY REPORT
+================================================================================
+Date: August 2026
+Repository: https://github.com/Pranava19/PRISM-Plant-Disease-Detection
+Architecture: YOLOv8 + PrismGhost Backbone + Quad-Head Multi-Scale Detect (P2, P3, P4, P5)
+Hardware: NVIDIA GeForce RTX 5050 Laptop GPU (8GB VRAM) | CUDA 12.8 | PyTorch 2.7.1+cu128
+
+--------------------------------------------------------------------------------
+1. EXECUTIVE SUMMARY
+--------------------------------------------------------------------------------
+This project develops a lightweight, edge-deployable deep learning framework for
+20-Class Plant Disease Object Detection. We modified the standard YOLOv8 architecture
+by introducing a novel PrismGhost convolutional module to minimize computational
+FLOPs while preserving fine spatial lesion patterns, paired with a Quad-Head
+Detection network (P2, P3, P4, P5) specifically engineered to detect micro-scale
+leaf lesions that standard 3-head detectors miss.
+
+Key Innovations:
+- PrismGhost Module: Primary standard convolution + cheap depthwise convolution,
+  slashing parameter count to 2.25 Million and complexity to 10.8 GFLOPs.
+- Quad-Head Detection: High-resolution P2/4 scale (160x160 feature maps) for
+  early-stage tiny fungal and bacterial lesion detection.
+- Unified 20-Class Dataset: Harmonized PlantVillage (lab) and PlantDoc (field) into
+  a single collision-free 28,268 image dataset (80/10/10 split).
+- Edge Deployment: Exported dynamic batching ONNX model (8.64 MB, 11.8 ms latency).
+
+--------------------------------------------------------------------------------
+2. DATASET TAXONOMY & 20 UNIFIED TARGET CLASSES
+--------------------------------------------------------------------------------
+Source Datasets:
+- PlantVillage: 26,393 valid annotated images (high contrast, controlled lab).
+- PlantDoc: 1,875 valid annotated images (complex backgrounds, field conditions).
+- Total Valid Samples: 28,268 images.
+- Split: Train (80% = 22,614), Val (10% = 2,826), Test (10% = 2,828).
+
+Target Classes:
+   0: Apple Scab                      (Fungal - Venturia inaequalis)
+   1: Apple Cedar Rust                (Fungal - Gymnosporangium juniperi-virginianae)
+   2: Apple Healthy                   (Healthy / Asymptomatic)
+   3: Corn Gray Leaf Spot             (Fungal - Cercospora zeae-maydis)
+   4: Corn Common Rust                (Fungal - Puccinia sorghi)
+   5: Corn Northern Leaf Blight       (Fungal - Exserohilum turcicum)
+   6: Grape Black Rot                 (Fungal - Guignardia bidwellii)
+   7: Grape Healthy                   (Healthy / Asymptomatic)
+   8: Pepper Bacterial Spot           (Bacterial - Xanthomonas campestris)
+   9: Pepper Healthy                  (Healthy / Asymptomatic)
+  10: Potato Early Blight             (Fungal - Alternaria solani)
+  11: Potato Late Blight              (Oomycete - Phytophthora infestans)
+  12: Tomato Bacterial Spot           (Bacterial - Xanthomonas spp.)
+  13: Tomato Early Blight             (Fungal - Alternaria solani)
+  14: Tomato Late Blight              (Oomycete - Phytophthora infestans)
+  15: Tomato Leaf Mold                (Fungal - Passalora fulva)
+  16: Tomato Septoria Leaf Spot       (Fungal - Septoria lycopersici)
+  17: Tomato Yellow Leaf Curl Virus   (Viral - Begomovirus / TYLCV)
+  18: Tomato Mosaic Virus             (Viral - Tobamovirus / ToMV)
+  19: Tomato Healthy                  (Healthy / Asymptomatic)
+
+--------------------------------------------------------------------------------
+3. MODEL ARCHITECTURE & PRISMGHOST FORMULATION
+--------------------------------------------------------------------------------
+Architecture Backbone:
+Input Image (640x640x3) -> PrismGhost Feature Pyramid (P1..P5) -> SPPF
+Neck: Bi-directional Feature Pyramid Network (BiFPN-style)
+Head: Quad-Head Detect
+  - Head 0 (P2/4  - 160x160): Micro-Lesions (< 16x16 px)
+  - Head 1 (P3/8  - 80x80)  : Small Fungal / Bacterial Spots
+  - Head 2 (P4/16 - 40x40)  : Medium Leaf Patches
+  - Head 3 (P5/32 - 20x20)  : Large / Whole Leaf Context
+
+PrismGhost Mathematical Formulation:
+- Primary Intrinsic Feature Map:
+  Y' = SiLU(BatchNorm(Conv_kxk(X, Wp))),  Y' in R^(H' x W' x m),  m = ceil(c2 / ratio)
+- Cheap Depthwise Feature Map:
+  Y'' = SiLU(BatchNorm(DWConv_3x3(Y', Wc))), Y'' in R^(H' x W' x (c2 - m))
+- Concatenated Output:
+  Y = [Y', Y''] in R^(H' x W' x c2)
+
+--------------------------------------------------------------------------------
+4. QUANTITATIVE BENCHMARK RESULTS
+--------------------------------------------------------------------------------
+Metric                      Value
+--------------------------------------------------------------------------------
+Overall Precision (P)       92.32%
+Overall Recall (R)          76.90%
+mAP @ 50                    84.65%
+mAP @ 50-95                 78.76%
+Model Parameters            2.25 Million
+Computational Complexity    10.8 GFLOPs
+Inference Latency           11.8 ms / image (approx. 85 FPS on RTX 5050 GPU)
+PyTorch Checkpoint (best.pt) 4.79 MB
+Exported ONNX (best.onnx)   8.64 MB
+
+--------------------------------------------------------------------------------
+5. REPOSITORY DIRECTORY STRUCTURE
+--------------------------------------------------------------------------------
+PRISM-Plant-Disease-Detection/
+└── 02_yolo_prismghost/
+    ├── README.md
+    ├── .gitignore
+    ├── model/
+    │   ├── yolo_prismghost.yaml
+    │   └── prismghost.py
+    ├── code/
+    │   └── train.py
+    ├── notebook/
+    │   └── plant_disease_detection.ipynb
+    ├── results/
+    │   ├── results.csv
+    │   ├── results.png
+    │   ├── confusion_matrix_normalized.png
+    │   ├── F1_curve.png
+    │   ├── PR_curve.png
+    │   └── weights/ (best.pt, best.onnx)
+    └── metrics/
+        └── metrics.json
+
+--------------------------------------------------------------------------------
+6. KEY PRESENTATION / VIVA TAKEAWAYS
+--------------------------------------------------------------------------------
+1. Why PrismGhost? Standard convolutions generate many redundant feature channels.
+   PrismGhost uses intrinsic features + cheap depthwise convs, cutting parameters
+   to 2.25M while maintaining high accuracy.
+2. Why Quad-Head (P2..P5)? Early-stage plant diseases appear as micro-lesions.
+   Adding the P2/4 head (160x160) preserves high spatial resolution and prevents
+   small lesion detection failure.
+3. Edge Viability: Exported ONNX model (8.64 MB, 11.8 ms) enables deployment on
+   agricultural drones, IoT cameras, and mobile applications.
+================================================================================
