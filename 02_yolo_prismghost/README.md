@@ -5,7 +5,7 @@
 [![CUDA 12.8](https://img.shields.io/badge/CUDA-12.8-76B900.svg)](https://developer.nvidia.com/cuda-toolkit)
 [![ONNX](https://img.shields.io/badge/ONNX-8.64_MB-005CED.svg)](https://onnx.ai/)
 
-Experiment 2 of the AgriYOLO project: A lightweight, high-performance object detection model for **20-Class Plant Disease Detection** using **YOLOv8 + PrismGhost Backbone** and **Quad-Head Detection ($P_2, P_3, P_4, P_5$)**.
+Experiment 2 of the PRISM Plant Disease Detection Project: A lightweight, high-performance object detection model for **20-Class Plant Disease Detection** using **YOLOv8 + PrismGhost Backbone** and **Quad-Head Detection ($P_2, P_3, P_4, P_5$)**.
 
 ---
 
@@ -14,16 +14,17 @@ Experiment 2 of the AgriYOLO project: A lightweight, high-performance object det
 02_yolo_prismghost/
 │
 ├── README.md                          # Project documentation and benchmarks
+├── .gitignore                         # Dataset ignores & environment filters
 │
 ├── model/
 │   ├── yolo_prismghost.yaml           # Quad-head YOLO architecture configuration
-│   └── prism_modules.py               # PyTorch PrismGhost module implementation
+│   └── prismghost.py                  # PyTorch PrismGhost module implementation
 │
 ├── code/
-│   └── run_exp2_local_gpu.py          # End-to-end Python pipeline script
+│   └── train.py                       # End-to-end training & evaluation pipeline
 │
 ├── notebook/
-│   └── final_error_free_model.ipynb   # Interactive step-by-step Jupyter notebook
+│   └── plant_disease_detection.ipynb  # Interactive step-by-step Jupyter Notebook
 │
 ├── results/
 │   ├── results.csv                    # Epoch-by-epoch training metrics
@@ -64,12 +65,12 @@ Experiment 2 of the AgriYOLO project: A lightweight, high-performance object det
 
 ```bash
 # Clone the repository
-git clone https://github.com/<your-username>/02_yolo_prismghost.git
-cd 02_yolo_prismghost
+git clone https://github.com/Pranava19/PRISM-Plant-Disease-Detection.git
+cd PRISM-Plant-Disease-Detection/02_yolo_prismghost
 
 # Install dependencies
 pip install ultralytics==8.3.40 torch torchvision pillow kaggle opencv-python matplotlib albumentations pyyaml pandas seaborn onnx onnxruntime
 
 # Run training & evaluation
-python code/run_exp2_local_gpu.py
+python code/train.py
 ```
