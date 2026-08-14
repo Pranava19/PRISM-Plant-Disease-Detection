@@ -1,0 +1,37 @@
+nc: 20
+scales:
+  n: [1.0, 1.0, 1024]
+
+backbone:
+  - [-1, 1, PrismGhost, [16, 3, 2]] # 0-P1/2 (downsample 640x640 -> 320x320)
+  - [-1, 1, PrismGhost, [32, 3, 2]] # 1-P2/4 (downsample 320x320 -> 160x160)
+  - [-1, 1, PrismGhost, [64, 3, 2]] # 2-P3/8 (downsample 160x160 -> 80x80)
+  - [-1, 1, PrismGhost, [128, 3, 2]] # 3-P4/16 (downsample 80x80 -> 40x40)
+  - [-1, 1, PrismGhost, [256, 3, 2]] # 4-P5/32 (downsample 40x40 -> 20x20)
+  - [-1, 1, SPPF, [256, 5]] # 5-P5/32
+
+head:
+  # Top-down feature aggregation
+  - [-1, 1, nn.Upsample, [None, 2, "nearest"]] # 6
+  - [[-1, 3], 1, Concat, [1]] # 7 cat backbone P4
+  - [-1, 1, PrismGhost, [128, 3, 1]] # 8 (P4/16)
+  - [-1, 1, nn.Upsample, [None, 2, "nearest"]] # 9
+  - [[-1, 2], 1, Concat, [1]] # 10 cat backbone P3
+  - [-1, 1, PrismGhost, [64, 3, 1]] # 11 (P3/8)
+  - [-1, 1, nn.Upsample, [None, 2, "nearest"]] # 12
+  - [[-1, 1], 1, Concat, [1]] # 13 cat backbone P2
+  - [-1, 1, PrismGhost, [32, 3, 1]] # 14 (P2/4 head output)
+
+  # Bottom-up feature aggregation
+  - [-1, 1, PrismGhost, [64, 3, 2]] # 15 downsample P2->P3
+  - [[-1, 11], 1, Concat, [1]] # 16 cat P3
+  - [-1, 1, PrismGhost, [64, 3, 1]] # 17 (P3/8 head output)
+  - [-1, 1, PrismGhost, [128, 3, 2]] # 18 downsample P3->P4
+  - [[-1, 8], 1, Concat, [1]] # 19 cat P4
+  - [-1, 1, PrismGhost, [128, 3, 1]] # 20 (P4/16 head output)
+  - [-1, 1, PrismGhost, [256, 3, 2]] # 21 downsample P4->P5
+  - [[-1, 5], 1, Concat, [1]] # 22 cat P5
+  - [-1, 1, PrismGhost, [256, 3, 1]] # 23 (P5/32 head output)
+
+  # Quad-head Detect (P2, P3, P4, P5)
+  - [[14, 17, 20, 23], 1, Detect, [nc]] # 24 Detect(P2, P3, P4, P5)
