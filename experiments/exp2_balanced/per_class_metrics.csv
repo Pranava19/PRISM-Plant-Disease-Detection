@@ -1,0 +1,21 @@
+class_id,class_name,AP50,AP50_95
+0,Apple Scab,0.9425,0.8964
+1,Apple Cedar Rust,0.8315,0.708
+2,Apple Healthy,0.995,0.9853
+3,Corn Gray Leaf Spot,0.9672,0.9511
+4,Corn Common Rust,0.9948,0.9837
+5,Corn Northern Leaf Blight,0.8905,0.7989
+6,Grape Black Rot,0.9949,0.9949
+7,Grape Healthy,0.9104,0.843
+8,Pepper Bacterial Spot,0.8777,0.8258
+9,Pepper Healthy,0.9792,0.9518
+10,Potato Early Blight,0.8842,0.8543
+11,Potato Late Blight,0.976,0.9546
+12,Tomato Bacterial Spot,0.9853,0.9766
+13,Tomato Early Blight,0.9178,0.8472
+14,Tomato Late Blight,0.9907,0.9624
+15,Tomato Leaf Mold,0.979,0.9747
+16,Tomato Septoria Leaf Spot,0.9612,0.9144
+17,Tomato Yellow Leaf Curl Virus,0.9451,0.9003
+18,Tomato Mosaic Virus,0.6642,0.6164
+19,Tomato Healthy,0.9284,0.8716

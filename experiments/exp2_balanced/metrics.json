@@ -1,0 +1,78 @@
+{
+  "experiment_id": "exp2_balanced",
+  "experiment_name": "YOLO11n + Class-Aware Balanced Dataset",
+  "architecture": {
+    "model_family": "YOLO11",
+    "scale": "nano",
+    "backbone": "Conv, C3k2, SPPF, C2PSA",
+    "neck": "PANet BiFPN-style",
+    "heads": "3-Scale Detect (P3/8, P4/16, P5/32)",
+    "pretrained": true
+  },
+  "dataset": {
+    "name": "PlantVillage + PlantDoc (Balanced)",
+    "classes": 20,
+    "balancing_strategy": "Oversampling minority classes with light augmentation (max:min <= 3:1)",
+    "split": "80% Train, 10% Val, 10% Test"
+  },
+  "overall_metrics": {
+    "precision": 0.9535,
+    "recall": 0.849,
+    "f1_score": 0.8982,
+    "mAP50": 0.9308,
+    "mAP50_95": 0.8906
+  },
+  "per_class_ap50": {
+    "Apple Scab": 0.9425,
+    "Apple Cedar Rust": 0.8315,
+    "Apple Healthy": 0.995,
+    "Corn Gray Leaf Spot": 0.9672,
+    "Corn Common Rust": 0.9948,
+    "Corn Northern Leaf Blight": 0.8905,
+    "Grape Black Rot": 0.9949,
+    "Grape Healthy": 0.9104,
+    "Pepper Bacterial Spot": 0.8777,
+    "Pepper Healthy": 0.9792,
+    "Potato Early Blight": 0.8842,
+    "Potato Late Blight": 0.976,
+    "Tomato Bacterial Spot": 0.9853,
+    "Tomato Early Blight": 0.9178,
+    "Tomato Late Blight": 0.9907,
+    "Tomato Leaf Mold": 0.979,
+    "Tomato Septoria Leaf Spot": 0.9612,
+    "Tomato Yellow Leaf Curl Virus": 0.9451,
+    "Tomato Mosaic Virus": 0.6642,
+    "Tomato Healthy": 0.9284
+  },
+  "per_class_map50_95": {
+    "Apple Scab": 0.8964,
+    "Apple Cedar Rust": 0.708,
+    "Apple Healthy": 0.9853,
+    "Corn Gray Leaf Spot": 0.9511,
+    "Corn Common Rust": 0.9837,
+    "Corn Northern Leaf Blight": 0.7989,
+    "Grape Black Rot": 0.9949,
+    "Grape Healthy": 0.843,
+    "Pepper Bacterial Spot": 0.8258,
+    "Pepper Healthy": 0.9518,
+    "Potato Early Blight": 0.8543,
+    "Potato Late Blight": 0.9546,
+    "Tomato Bacterial Spot": 0.9766,
+    "Tomato Early Blight": 0.8472,
+    "Tomato Late Blight": 0.9624,
+    "Tomato Leaf Mold": 0.9747,
+    "Tomato Septoria Leaf Spot": 0.9144,
+    "Tomato Yellow Leaf Curl Virus": 0.9003,
+    "Tomato Mosaic Virus": 0.6164,
+    "Tomato Healthy": 0.8716
+  },
+  "model_complexity": {
+    "parameters_million": 2.59,
+    "gflops": 6.5,
+    "latency_ms": 7.8
+  },
+  "weights": {
+    "pytorch_best_pt": "F:\\pranav\\experiments\\exp2_balanced\\runs\\train_exp2\\weights\\best.pt",
+    "onnx_export": "experiments\\exp2_balanced\\weights\\best.onnx"
+  }
+}

@@ -1,0 +1,28 @@
+# PRISM Experiment 2: YOLO11n + Class-Aware Balanced Dataset
+path: F:/pranav/data/balanced
+train: images/train
+val: images/val
+test: images/test
+
+nc: 20
+names:
+  0: Apple Scab
+  1: Apple Cedar Rust
+  2: Apple Healthy
+  3: Corn Gray Leaf Spot
+  4: Corn Common Rust
+  5: Corn Northern Leaf Blight
+  6: Grape Black Rot
+  7: Grape Healthy
+  8: Pepper Bacterial Spot
+  9: Pepper Healthy
+  10: Potato Early Blight
+  11: Potato Late Blight
+  12: Tomato Bacterial Spot
+  13: Tomato Early Blight
+  14: Tomato Late Blight
+  15: Tomato Leaf Mold
+  16: Tomato Septoria Leaf Spot
+  17: Tomato Yellow Leaf Curl Virus
+  18: Tomato Mosaic Virus
+  19: Tomato Healthy

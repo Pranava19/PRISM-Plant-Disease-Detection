@@ -1,0 +1,21 @@
+class_id,class_name,count_before,count_after,percent_increase
+0,Apple Scab,672,1632,142.86
+1,Apple Cedar Rust,363,1632,349.59
+2,Apple Healthy,1530,1632,6.67
+3,Corn Gray Leaf Spot,465,1632,250.97
+4,Corn Common Rust,1054,1632,54.84
+5,Corn Northern Leaf Blight,1037,1632,57.38
+6,Grape Black Rot,1097,1632,48.77
+7,Grape Healthy,535,1632,205.05
+8,Pepper Bacterial Spot,1004,1632,62.55
+9,Pepper Healthy,1423,1635,14.9
+10,Potato Early Blight,1057,1632,54.4
+11,Potato Late Blight,1000,1634,63.4
+12,Tomato Bacterial Spot,1944,1961,0.87
+13,Tomato Early Blight,957,1632,70.53
+14,Tomato Late Blight,1736,1736,0.0
+15,Tomato Leaf Mold,995,1632,64.02
+16,Tomato Septoria Leaf Spot,1764,1764,0.0
+17,Tomato Yellow Leaf Curl Virus,4896,4896,0.0
+18,Tomato Mosaic Virus,489,1633,233.95
+19,Tomato Healthy,1578,1636,3.68
